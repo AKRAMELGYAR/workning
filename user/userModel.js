@@ -6,8 +6,8 @@ export const enumRole = {
     admin: 'admin'
 }
 export const enumStatus = {
-    binding: 'binding',
-    aproved: 'aproved',
+    binding: 'pinding',
+    aproved: 'approved',
 }
 
 const userSchema = new mongoose.Schema({

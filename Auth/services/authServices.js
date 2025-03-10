@@ -1,10 +1,9 @@
-const Repo = require('../repo/authRepo')
-const bcrypt = require('bcrypt')
-const AppError = require('../../utils/AppError')
-const generateToken = require('../../utils/GenerateToken')
+import * as Repo from '../repo/authRepo.js'
+import bcrypt from 'bcrypt'
+import  {AppError} from '../../utils/AppError.js'
+import {GenerateToken} from '../../utils/GenerateToken.js'
 
-const Register = async(userData)=>{
-    console.log(userData)
+export const Register = async(userData)=>{
     const {userName , email  , password , Cpassword} = userData
     if(password !== Cpassword)
         {
@@ -23,7 +22,7 @@ const Register = async(userData)=>{
         password : hash_pass,
     }
 
-    const token = generateToken({email : newuser.email , id : newuser._id})
+    const token = GenerateToken({email : newuser.email , id : newuser._id})
     newuser.token = token
 
     await Repo.saveuser(newuser)
@@ -31,7 +30,7 @@ const Register = async(userData)=>{
     return token
 }
 
-const login = async(email,password,res)=>{
+export const login = async(email,password,res)=>{
     const user = await Repo.FindByEmail(email)
     if(!user)
         {
@@ -40,18 +39,11 @@ const login = async(email,password,res)=>{
     const pass = await bcrypt.compare(password , user.password)
     if(pass)
         {
-            const token = generateToken({email : user.email , id : user._id},res)
+            const token = GenerateToken({email : user.email , id : user._id},res)
 
             user.token = token
             await Repo.saveuser(user);
             return token
         }
     throw new AppError("password or Email are incorrect!" , 500)
-}
-
-
-
-module.exports = {
-    login,
-    Register,
 }
