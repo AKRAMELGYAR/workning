@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
-import AppError from '../../utils/AppError.js';
-import generateToken from '../../utils/GenerateToken.js';
+import {AppError} from '../../utils/AppError.js';
+import {GenerateToken} from '../../utils/GenerateToken.js';
 import { findDoctorByEmail, createDoctor, updateDoctor, updateDoctorCV } from '../repo/doctorRepo.js';
 
 const registerDoctor = async (userData) => {
@@ -29,7 +29,7 @@ const registerDoctor = async (userData) => {
   };
 
   const savedDoctor = await createDoctor(newDoctor);
-  const token = generateToken({ email: savedDoctor.email, id: savedDoctor._id });
+  const token = GenerateToken({ email: savedDoctor.email, id: savedDoctor._id });
   savedDoctor.token = token;
 
   return token;
@@ -46,7 +46,7 @@ const loginDoctor = async (email, password, res) => {
     throw new AppError("Password or email is incorrect!", 401);
   }
 
-  const token = generateToken({ email: doctor.email, id: doctor._id }, res);
+  const token = GenerateToken({ email: doctor.email, id: doctor._id }, res);
   doctor.token = token;
   await updateDoctor(doctor._id, doctor);
   return token;

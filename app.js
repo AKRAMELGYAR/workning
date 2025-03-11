@@ -9,6 +9,12 @@ app.use(express.json())
 import * as authRoutes from './Auth/routes/authRoutes.js'
 app.use('/auth' , authRoutes.default)
 
+import * as doctorRoutes from './doctor/routes/doctorRoutes.js'
+app.use('/doctor' ,doctorRoutes.default)
+
+import * as adminRoutes from './admin/routes/adminRoutes.js'
+app.use('/admin',adminRoutes.default)
+
 mongoose.connect(process.env.URI)
 .then(
     app.listen(process.env.PORT,()=>{

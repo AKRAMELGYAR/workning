@@ -1,9 +1,9 @@
 import express from 'express';
 import * as doctorController from '../controller/doctorController.js';
+const router = express.Router()
 import upload from '../../utils/uploadMiddleware.js';
 //import authenticate from '../../utils/authMiddleware.js';
 
-const router = express.Router();
 
 router.route('/register_doctor')
   .post(doctorController.registerDoctorController);

@@ -1,12 +1,14 @@
-import { AppError } from "../../utils/AppError";
-import * as Repo from "../repo/adminRepo"
+import { AppError } from "../../utils/AppError.js";
+import * as Repo from "../repo/adminRepo.js"
+import Doctor from "../../doctor/model/doctorModel.js";
 
 const approveDoctor =  async(doctorId)=>{
 
-    const doctor = await Repo.findById(doctorId);//
+    console.log(doctorId)
+    const doctor = await Repo.findById(doctorId);
     if (!doctor) throw new AppError("user not found!" , 404);
 
-    doctor.isApproved = true;
+    doctor.isVerified = true;
     await doctor.save();
 
     return { message: "Doctor approved successfully." };
@@ -15,17 +17,15 @@ const approveDoctor =  async(doctorId)=>{
 const rejectDoctor = async(doctorId)=>{
     const doctor = await Repo.findById(doctorId);//
     if (!doctor) throw new AppError("Doctor not found.",404);
-
-    doctor.isApproved = false;
-    await doctor.save();
+    await Repo.findByIdAndDelete(doctorId);
 
     return { message: "Doctor rejected" };
 }
 
 const deleteDoctor = async(doctorId)=>{
-    const doctor = await Repo.findByIdAndDelete(doctorId);//
+    const doctor = await Repo.findById(doctorId);//
     if (!doctor) throw new AppError("Doctor not found.",404);
-
+    await Repo.findByIdAndDelete(doctorId);
     return { message: "Doctor deleted successfully." };
 }
 

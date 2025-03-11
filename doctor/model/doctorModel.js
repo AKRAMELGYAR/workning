@@ -10,6 +10,7 @@ const doctorSchema = new mongoose.Schema({
   consultationFees: { type: Number },
   cv: { type: String , required : true }, 
   isVerified: { type: Boolean, default: false },
+  
 });
 
 const Doctor = mongoose.model('Doctor', doctorSchema);

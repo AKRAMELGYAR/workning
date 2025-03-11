@@ -1,5 +1,5 @@
 import { registerDoctor, loginDoctor, updateDoctorProfile, uploadDoctorCV } from '../services/doctorServices.js';
-import AppError from '../../utils/AppError.js';
+import {AppError} from '../../utils/AppError.js';
 
 const registerDoctorController = async (req, res, next) => {
   try {

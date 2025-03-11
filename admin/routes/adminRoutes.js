@@ -1,12 +1,12 @@
 import express from 'express'
 const router = express.Router();
-import * as adminController from '../controller/admincontroller'
+import * as adminController from '../controller/admincontroller.js'
 
-router.route('/approveDoctor')
-            .post(adminController.approveDoctor)
+router.route('/approveDoctor/:doctorId')
+            .patch(adminController.approveDoctor)
 
-router.route('/rejectDoctor')
-            .post(adminController.rejectDoctor)
+router.route('/rejectDoctor/:doctorId')
+            .delete(adminController.rejectDoctor)
 
 router.route('/deleteDoctor/:doctorId')
             .delete(adminController.deleteDoctor)
@@ -14,4 +14,4 @@ router.route('/deleteDoctor/:doctorId')
 router.route('/doctorCv/:doctorId')
             .get(adminController.getDoctorCV)
 
-export default router
+export default router    
