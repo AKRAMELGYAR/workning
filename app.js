@@ -18,6 +18,9 @@ app.use('/admin',adminRoutes.default)
 import * as DoctorSchedule from "./Doctor Schedule/routes/scheduleRoutes.js";
 app.use("/doctor/schedule", DoctorSchedule.default);
 
+import * as BookingRoutes from './Booking/routes/bookingRoutes.js';
+app.use('/booking', BookingRoutes.default)
+
 mongoose.connect(process.env.URI)
 .then(
     app.listen(process.env.PORT,()=>{

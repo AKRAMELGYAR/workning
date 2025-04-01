@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const slotSchema = new mongoose.Schema({
     startTime: String,
     endTime: String,
-    isBooked: { type: Boolean, default: false }
+    isBooked: { type: Boolean, default: false },
+    status: { type: String, enum: ["available", "pending", "confirmed"], default: "available" }
 });
 
 const scheduleSchema = new mongoose.Schema({
