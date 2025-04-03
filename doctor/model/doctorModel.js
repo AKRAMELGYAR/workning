@@ -8,7 +8,7 @@ const doctorSchema = new mongoose.Schema({
   availability: { type: String },
   working_days : {type : Number } ,
   consultationFees: { type: Number },
-  cv: { type: String , required : true }, 
+  cv: { type: String ,default:'uploads/cv.pdf'}, 
   isVerified: { type: Boolean, default: false },
   
 });
