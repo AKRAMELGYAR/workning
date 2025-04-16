@@ -3,3 +3,4 @@ export const CatchAsync = fn =>{
         fn(req,res,next).catch(err=>next(err))
     }
 }
+export default CatchAsync; 

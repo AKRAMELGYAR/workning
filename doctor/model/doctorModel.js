@@ -1,18 +1,34 @@
-import mongoose from 'mongoose';
+import mongoose  from "mongoose";
+import Specialization from "../model/SpecializationModel.js";
 
 const doctorSchema = new mongoose.Schema({
-  userName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  specialization: { type: String },
-  availability: { type: String },
-  working_days : {type : Number } ,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  specialization: { 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Specialization', 
+    required: true 
+  },
+  working_days: [{ type: String }] ,
   consultationFees: { type: Number },
-  cv: { type: String , required : true }, 
+  cv: { type: String, required: true },
   isVerified: { type: Boolean, default: false },
-  
+  locations: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Location',
+    required: true,  
+  }],
+  addresses: [{
+    street: { type: String, required: true },
+    city: { type: String, required: true },
+    zip: { type: String, required: true }
+  }]
 });
 
-const Doctor = mongoose.model('Doctor', doctorSchema);
+const Doctor = mongoose.model("Doctor", doctorSchema);
 
 export default Doctor;
+

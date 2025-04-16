@@ -15,6 +15,9 @@ app.use('/doctor' ,doctorRoutes.default)
 import * as adminRoutes from './admin/routes/adminRoutes.js'
 app.use('/admin',adminRoutes.default)
 
+
+app.use('/uploads', express.static('uploads'));
+
 mongoose.connect(process.env.URI)
 .then(
     app.listen(process.env.PORT,()=>{

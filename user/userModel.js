@@ -22,7 +22,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email address']
+        match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email address'] , 
+        validate: {
+            validator: function (value) {
+              return value !== null; 
+            },
+            message: 'Email cannot be null',
+          },
     },
     password: {
         type: String,

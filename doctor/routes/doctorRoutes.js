@@ -1,20 +1,19 @@
 import express from 'express';
 import * as doctorController from '../controller/doctorController.js';
-const router = express.Router()
 import upload from '../../utils/uploadMiddleware.js';
-//import authenticate from '../../utils/authMiddleware.js';
+import CatchAsync from '../../utils/CatchAsync.js';
 
+const router = express.Router();
 
 router.route('/register_doctor')
-  .post(doctorController.registerDoctorController);
+  .post(CatchAsync(doctorController.registerDoctorController));
 
 router.route('/login_doctor')
-  .post(doctorController.loginDoctorController);
-
-/*router.route('/update_doctor_profile')
-  .put(authenticate, doctorController.updateDoctorProfileController);
+  .post(CatchAsync(doctorController.loginDoctorController));
 
 router.route('/upload-cv')
- .post(authenticate, upload.single('cv'), doctorController.uploadDoctorCVController);
-*/
- export default router;
+  .post(upload.single('cv'), CatchAsync(doctorController.uploadDoctorCVController));
+
+router.route('/filter').get(CatchAsync(doctorController.FilterDoctors))
+
+export default router;

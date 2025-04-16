@@ -4,7 +4,8 @@ export const FindByEmail = async(email)=>{
     return await user.findOne({email}) 
 }
 
-export const saveuser = async(userData)=>{
-    const newuser = new user(userData)
-    return await newuser.save()
-}
+export const saveUser = async (userData) => {
+    const newUser = new user(userData);
+    return await newUser.save();
+};
+
