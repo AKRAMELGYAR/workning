@@ -22,8 +22,7 @@ const deleteDoctor = CatchAsync(async (req, res) => {
 });
 
 const getDoctorCV = CatchAsync(async (req, res) => {
-    const { doctorId } = req.params;
-    const filePath = await adminService.getDoctorCV(doctorId);
+    const filePath = await adminService.getDoctorCV(req.params.doctorId);
 
     res.download(filePath, path.basename(filePath));
 });

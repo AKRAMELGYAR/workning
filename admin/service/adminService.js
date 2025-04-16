@@ -32,9 +32,9 @@ const deleteDoctor = async(doctorId)=>{
 const getDoctorCV = async(doctorId)=>{
     const doctor = await Repo.findById(doctorId);//
     if (!doctor) throw new AppError("Doctor not found.",404);
-    if (!doctor.cvFilePath) throw new AppError("Doctor has not uploaded a CV.",404);
+    if (!doctor.cv) throw new AppError("Doctor has not uploaded a CV.",404);
 
-    return doctor.cvFilePath;
+    return doctor.cv;
 }
 
 

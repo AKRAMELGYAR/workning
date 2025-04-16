@@ -15,11 +15,12 @@ const createDoctor = async (doctorData) => {
 };
 
 const updateDoctor = async (id, updateData) => {
-  return await Doctor.findByIdAndUpdate(id, updateData, { new: true });
+  return await Doctor.findByIdAndUpdate({_id : id}, {$set : {...updateData}}, { new: true });
 };
 
 const updateDoctorCV = async (id, cvPath) => {
-  return await Doctor.findByIdAndUpdate(id, { cv: cvPath }, { new: true });
+  console.log(id , cvPath)
+  return await Doctor.updateOne({_id : id} , {$set : {cv : cvPath}} ,{new : true});
 };
 
 export { findDoctorByEmail, findDoctorById, createDoctor, updateDoctor, updateDoctorCV };

@@ -14,7 +14,7 @@ const doctorSchema = new mongoose.Schema({
   },
   working_days: [{ type: String }] ,
   consultationFees: { type: Number },
-  cv: { type: String, required: true },
+  cv: { type: String ,default:'uploads/cv.pdf'}, 
   isVerified: { type: Boolean, default: false },
   locations: [{
     type: mongoose.Schema.Types.ObjectId,

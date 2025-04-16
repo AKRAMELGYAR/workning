@@ -106,11 +106,13 @@ const loginDoctor = async (email, password, res) => {
 
 const updateDoctorProfile = async (id, updateData) => {
   const updatedDoctor = await updateDoctor(id, updateData);
+  if(!updatedDoctor) throw new AppError("no data", 401);
   return updatedDoctor;
 };
 
 const uploadDoctorCV = async (id, cvPath) => {
   const updatedDoctor = await updateDoctorCV(id, cvPath);
+  if(!updatedDoctor) throw new AppError("no data", 401);
   return updatedDoctor;
 };
 
