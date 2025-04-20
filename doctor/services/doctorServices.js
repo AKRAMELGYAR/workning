@@ -9,7 +9,7 @@ import * as LocationRepo from '../../locations/repository/locationRepo.js';
 
  const registerDoctor = async (userData) => {
   const { userName, email, password, specialization, 
-          consultationFees, cv, working_days, locations, addresses } = userData;
+          consultationFees, cv, locations, addresses } = userData;
 
   // Input validation
   if (!email || typeof email !== 'string') {
@@ -77,7 +77,6 @@ import * as LocationRepo from '../../locations/repository/locationRepo.js';
       specialization,
       consultationFees,
       cv,
-      working_days,
       locations: locationIds, 
       addresses, 
   };

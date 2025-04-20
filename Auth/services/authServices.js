@@ -25,7 +25,7 @@ export const Register = async(userData)=>{
     const token = GenerateToken({email : newuser.email , id : newuser._id})
     newuser.token = token
 
-    await Repo.saveuser(newuser)
+    await Repo.saveUser(newuser)
 
     return token
 }
@@ -42,7 +42,7 @@ export const login = async(email,password,res)=>{
             const token = GenerateToken({email : user.email , id : user._id},res)
 
             user.token = token
-            await Repo.saveuser(user);
+            await Repo.saveUser(user);
             return token
         }
     throw new AppError("password or Email are incorrect!" , 500)

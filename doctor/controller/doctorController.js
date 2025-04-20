@@ -1,6 +1,5 @@
 import { registerDoctor, loginDoctor, updateDoctorProfile, uploadDoctorCV  , filterDoctors} from '../services/doctorServices.js';
 import {AppError} from '../../utils/AppError.js';
-import { registerDoctor, loginDoctor, updateDoctorProfile, uploadDoctorCV } from '../services/doctorServices.js';
 import Doctor from '../model/doctorModel.js';
 import { CatchAsync } from '../../utils/CatchAsync.js';
 
