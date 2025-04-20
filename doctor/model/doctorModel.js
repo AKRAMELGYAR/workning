@@ -12,7 +12,6 @@ const doctorSchema = new mongoose.Schema({
     ref: 'Specialization', 
     required: true 
   },
-  working_days: [{ type: String }] ,
   consultationFees: { type: Number },
   cv: { type: String ,default:'uploads/cv.pdf'}, 
   isVerified: { type: Boolean, default: false },

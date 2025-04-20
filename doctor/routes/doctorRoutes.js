@@ -9,7 +9,6 @@ router.route('/register_doctor')
 
 router.route('/login_doctor')
   .post(doctorController.loginDoctorController);
-
 router.route('/upload-cv')
   .post(upload.single('cv'), doctorController.uploadDoctorCVController);
 

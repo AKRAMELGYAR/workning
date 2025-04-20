@@ -8,9 +8,7 @@ import Doctor from "../model/doctorModel.js"
 import * as LocationRepo from '../../locations/repository/locationRepo.js';
 
 const registerDoctor = async (userData) => {
-  const { userName, email, password, specialization, 
-          consultationFees, cv, working_days, locations, addresses } = userData;
-          console.log(userData)
+  const { userName, email, password, specialization, consultationFees, cv, locations, addresses } = userData;
 
   if (!email || typeof email !== 'string') {
       throw new AppError('Email is required and must be a string', 400);
