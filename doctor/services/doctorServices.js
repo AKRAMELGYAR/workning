@@ -7,85 +7,77 @@ import * as AuthRepo from "../../Auth/repo/authRepo.js"
 import Doctor from "../model/doctorModel.js"
 import * as LocationRepo from '../../locations/repository/locationRepo.js';
 
- const registerDoctor = async (userData) => {
+const registerDoctor = async (userData) => {
   const { userName, email, password, specialization, 
           consultationFees, cv, working_days, locations, addresses } = userData;
+          console.log(userData)
 
-  // Input validation
   if (!email || typeof email !== 'string') {
       throw new AppError('Email is required and must be a string', 400);
   }
 
-  // Check if user already exists
   const oldUser = await AuthRepo.FindByEmail(email);
   if (oldUser) {
       throw new AppError('Account already exists!', 400);
   }
 
-  // Hash password
   const hash_pass = await bcrypt.hash(password, 12);
-
-  // Create new user
   const newUser = {
       userName,
       email,
       password: hash_pass,
-      role: 'doctor', 
+      role: 'doctor',
   };
 
-  // Generate token
   const token = GenerateToken({ email: newUser.email, id: newUser._id });
   newUser.token = token;
 
-  // Save user
   const savedUser = await AuthRepo.saveUser(newUser);
 
-  // Handle locations
+  // ===⬇️ Check for duplicates and valid ObjectIds ⬇️===
   const locationIds = [];
-  const uniqueLocations = new Set();
-  const existingDoctor = await Doctor.findOne({ user: savedUser._id }).populate('locations');
-  const existingGovernorates = new Set(existingDoctor ? existingDoctor.locations.map(loc => loc.name) : []);
+  const uniqueIds = new Set();
 
-  for (const locationName of locations) {
-      // Check if already assigned to this doctor
-      if (existingGovernorates.has(locationName.toUpperCase())) {
-          throw new AppError(`Governorate '${locationName}' is already added to this doctor!`, 400);
-      }
+  for (const locationId of locations) {
+    // Check for duplicate IDs in same request
+    if (uniqueIds.has(locationId)) {
+      throw new AppError(`Duplicate location ID in request: ${locationId}`, 400);
+    }
+    // Check if location exists
+    const location = await LocationRepo.getLocationByIdFromDB(locationId);
+    if (!location) {
+      throw new AppError(`Location not found: ${locationId}`, 404);
+    }
 
-      // Check for duplicates in current request
-      if (uniqueLocations.has(locationName.toUpperCase())) {
-          throw new AppError(`Governorate '${locationName}' is duplicated in this request!`, 400);
-      }
-
-      // Find or create location
-      let location = await LocationRepo.findLocationByName(locationName);
-      if (!location) {
-          location = await LocationRepo.addLocation({ name: locationName });
-      }
-
-      if (!location) {
-          throw new AppError(`Failed to process location: ${locationName}`, 500);
-      }
-
-      locationIds.push(location._id);
-      uniqueLocations.add(locationName.toUpperCase());
+    uniqueIds.add(locationId);
+    locationIds.push(locationId);
   }
 
-  // Create doctor profile
+  // Check if doctor already has those locations
+  const existingDoctor = await Doctor.findOne({ user: savedUser._id });
+  if (existingDoctor) {
+    const existingIds = existingDoctor.locations.map(id => id.toString());
+    for (const id of locationIds) {
+      if (existingIds.includes(id.toString())) {
+        throw new AppError(`Location ID ${id} is already assigned to this doctor!`, 400);
+      }
+    }
+  }
+
   const newDoctor = {
-      user: savedUser._id, 
-      specialization,
-      consultationFees,
-      cv,
-      working_days,
-      locations: locationIds, 
-      addresses, 
+    user: savedUser._id,
+    specialization,
+    consultationFees,
+    cv,
+    working_days,
+    locations: locationIds,
+    addresses,
   };
 
   await createDoctor(newDoctor);
-
   return token;
 };
+
 
 const loginDoctor = async (email, password, res) => {
   const doctor = await findDoctorByEmail(email);
@@ -122,16 +114,16 @@ const filterDoctors = async (filters) => {
     const { specialization, location, page = 1, limit = 10 } = filters;
     const query = {};
 
-    // Specialization is always an ObjectId
-    if (specialization && mongoose.Types.ObjectId.isValid(specialization)) { 
-      query.specialization = specialization;
+    if (specialization) {
+      query.specialization = new mongoose.Types.ObjectId(specialization);
     }
-    // Filter by location (exact match)
-    if (location) { 
+
+    if (location) {
       query.locations = location;
     }
 
     const skip = (page - 1) * limit;
+
     const doctorsPromise = Doctor.find(query)
       .populate('specialization', 'name')
       .lean()
@@ -140,6 +132,7 @@ const filterDoctors = async (filters) => {
       .select('name specialization locations consultationFees');
 
     const totalCountPromise = Doctor.countDocuments(query);
+
     const [doctors, totalCount] = await Promise.all([doctorsPromise, totalCountPromise]);
 
     return { doctors, totalCount };

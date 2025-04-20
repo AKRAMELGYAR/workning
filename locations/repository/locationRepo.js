@@ -1,31 +1,22 @@
-import {Location}  from '../model/locationModel.js';
+import { Location } from '../model/locationModel.js';
 
-// Find a location by name (case-insensitive)
-export const findLocationByName = async (name) => {
-    return Location.findOne({ name: name.toUpperCase() });
+ const insertLocation = async (data) => {
+    const location = new Location(data);
+    return await location.save();
 };
 
-// Find a location by ID
-export const findLocationById = async (id) => {
-    return Location.findById(id);
+ const getLocationByNameFromDB = async (name) => {
+    return await Location.findOne({ name });
 };
 
-// Add a new location with duplicate handling
-export const addLocation = async (locationData) => {
-    try {
-        locationData.name = locationData.name.toUpperCase();
-        const location = new Location(locationData);
-        await location.save();
-        return location;
-    } catch (error) {
-        if (error.code === 11000) { // MongoDB duplicate key error
-            return Location.findOne({ name: locationData.name });
-        }
-        throw error;
-    }
+ const getLocationByIdFromDB = async (id) => {
+    return await Location.findById(id);
 };
 
-// Delete a location by ID
-export const deleteLocationById = async (id) => {
-    return Location.findByIdAndDelete(id);
+ const deleteLocationFromDB = async (id) => {
+    return await Location.findByIdAndDelete(id);
 };
+
+export {
+    insertLocation ,  getLocationByNameFromDB , getLocationByIdFromDB , deleteLocationFromDB
+}

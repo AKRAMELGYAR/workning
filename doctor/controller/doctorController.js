@@ -1,8 +1,9 @@
 import { registerDoctor, loginDoctor, updateDoctorProfile, uploadDoctorCV  , filterDoctors} from '../services/doctorServices.js';
 import {AppError} from '../../utils/AppError.js';
-import { registerDoctor, loginDoctor, updateDoctorProfile, uploadDoctorCV } from '../services/doctorServices.js';
 import Doctor from '../model/doctorModel.js';
 import { CatchAsync } from '../../utils/CatchAsync.js';
+import mongoose  from "mongoose";
+
 
 const registerDoctorController = CatchAsync(
   async (req, res, next) => {
@@ -76,21 +77,30 @@ const uploadDoctorCVController = CatchAsync(
   }
 )}
 
- const FilterDoctors = async (req, res) => {
+const FilterDoctors = async (req, res) => {
   try {
-      const filters = {
-          specialization: req.query.specialization,
-          location: req.query.location,
-          page: Number(req.query.page) || 1,
-          limit: Number(req.query.limit) || 10,
-      };
-      console.log("specialization "+ filters.specialization);  
-      const result = await filterDoctors(filters);
-      res.status(200).json(result);
+    const filters = {
+      specialization: req.query.specialization,
+      location: req.query.location,
+      page: Number(req.query.page) || 1,
+      limit: Number(req.query.limit) || 10,
+    };
+
+    if (filters.specialization && !mongoose.Types.ObjectId.isValid(filters.specialization)) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Invalid specialization ObjectId format',
+      });
+    }
+
+    const result = await filterDoctors(filters);
+    res.status(200).json(result);
   } catch (error) {
-      res.status(500).json({ message: error.message });
+    console.error("Error in FilterDoctors:", error);
+    res.status(500).json({ message: error.message });
   }
-}
+};
+
 
 export {
   registerDoctorController,

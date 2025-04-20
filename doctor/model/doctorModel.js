@@ -1,5 +1,5 @@
 import mongoose  from "mongoose";
-import Specialization from "../model/SpecializationModel.js";
+import Specialization from "../../specialization/SpecializationModel.js";
 
 const doctorSchema = new mongoose.Schema({
   user: {

@@ -15,6 +15,9 @@ app.use('/doctor' ,doctorRoutes.default)
 import * as adminRoutes from './admin/routes/adminRoutes.js'
 app.use('/admin',adminRoutes.default)
 
+import specializationRoutes from './specialization/specializationRoutes.js';
+app.use('/specialization', specializationRoutes);
+
 
 app.use('/uploads', express.static('uploads'));
 import * as DoctorSchedule from "./Doctor Schedule/routes/scheduleRoutes.js";
@@ -22,6 +25,10 @@ app.use("/doctor/schedule", DoctorSchedule.default);
 
 import * as BookingRoutes from './Booking/routes/bookingRoutes.js';
 app.use('/booking', BookingRoutes.default)
+
+import locationRoutes from "./locations/routes/locationRoutes.js";
+app.use('/location', locationRoutes);
+
 
 mongoose.connect(process.env.URI)
 .then(
