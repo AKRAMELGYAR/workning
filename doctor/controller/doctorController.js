@@ -71,7 +71,7 @@ const uploadDoctorCVController = CatchAsync(
       const updatedDoctor = await uploadDoctorCV(req.params.id, cvPath);
       res.status(200).json({
         status: 'success',
-        message: 'Doctor CV uploaded successfully!',
+        message: 'Doctor CV uploaded successfully!!',
         data: updatedDoctor,
       });
   }
