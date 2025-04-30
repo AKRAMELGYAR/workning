@@ -42,7 +42,7 @@ const updateDoctorProfileController = CatchAsync(
   try {
     if (!req.file) {
       return res.status(400).json({ 
-        status: 'fail', 
+        status: 'FAIL', 
         message: 'No CV file uploaded' 
       });
     }
